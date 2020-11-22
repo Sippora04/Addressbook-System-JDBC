@@ -2,6 +2,8 @@ package com;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -34,5 +36,13 @@ public class AddressBookJDBCTest {
 		LocalDate endDate = LocalDate.now();
 		List<AddressBookData> matchingRecords = addressBookService.getAddressBookDataByStartDate(startDate, endDate);
 		Assert.assertEquals(matchingRecords.get(0), addressBookService.getAddressBookData("Sippora"));
+	}
+
+	@Test
+	public void givenContacts_RetrieveNumberOfContacts_ByCityOrState() throws AddressBookException {
+		AddressBookService addressBookService = new AddressBookService();
+		addressBookService.readAddressBookData();
+		Map<String, Integer> contactByCityOrStateMap = addressBookService.readContactByCityOrState();
+		Assert.assertEquals(true, contactByCityOrStateMap.get("Maharashtra").equals(2));
 	}
 }

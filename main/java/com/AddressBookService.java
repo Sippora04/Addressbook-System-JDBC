@@ -2,6 +2,7 @@ package com;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public class AddressBookService {
 	public AddressBookJDBCService addressbookJDBCService;
@@ -26,7 +27,7 @@ public class AddressBookService {
 		}
 	}
 
-	AddressBookData getAddressBookData(String name) {
+	public AddressBookData getAddressBookData(String name) {
 		return this.addressBookDataList.stream()
 				.filter(addressBookDataListObject -> addressBookDataListObject.getFirst_name().equals(name)).findFirst()
 				.orElse(null);
@@ -41,4 +42,10 @@ public class AddressBookService {
 			throws AddressBookException {
 		return this.addressbookJDBCService.getAdressBookDataByStartingDate(startDate, endDate);
 	}
+
+	public Map<String, Integer> readContactByCityOrState() throws AddressBookException {
+		return this.addressbookJDBCService.getContactsByCityOrState();
+
+	}
+
 }

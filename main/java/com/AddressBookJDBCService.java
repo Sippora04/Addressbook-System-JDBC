@@ -8,7 +8,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AddressBookJDBCService {
 	List<AddressBookData> addressBookDataObj = null;
@@ -143,5 +145,30 @@ public class AddressBookJDBCService {
 		} catch (SQLException e) {
 			throw new AddressBookException("Connection Failed.");
 		}
+	}
+
+	public Map<String, Integer> getContactsByCityOrState() throws AddressBookException {
+		Map<String, Integer> contactByCityOrStateMap = new HashMap<>();
+		ResultSet resultSet;
+		String sqlCity = "SELECT city, count(first_name) as count FROM address_book GROUP BY city; ";
+		String sqlState = "SELECT state, count(first_name) as count FROM address_book GROUP BY state; ";
+		try (Connection connection = this.getConnection()) {
+			Statement statement = connection.createStatement();
+			resultSet = statement.executeQuery(sqlCity);
+			while (resultSet.next()) {
+				String city = resultSet.getString("city");
+				Integer count = resultSet.getInt("count");
+				contactByCityOrStateMap.put(city, count);
+			}
+			resultSet = statement.executeQuery(sqlState);
+			while (resultSet.next()) {
+				String state = resultSet.getString("state");
+				Integer count = resultSet.getInt("count");
+				contactByCityOrStateMap.put(state, count);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return contactByCityOrStateMap;
 	}
 }
