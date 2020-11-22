@@ -114,4 +114,18 @@ public class AddressBookData {
 	public void setAddressbook_type(String addressbook_type) {
 		this.addressbook_type = addressbook_type;
 	}
+
+	public AddressBookData(String first_name, String last_name, String address, String city, String state, int zip,
+			long phone_number, String email_id, String addressbook_type) {
+		super();
+		this.first_name = first_name;
+		this.last_name = last_name;
+		this.address = address;
+		this.city = city;
+		this.state = state;
+		this.zip = zip;
+		this.phone_number = phone_number;
+		this.email_id = email_id;
+		this.addressbook_type = addressbook_type;
+	}
 }

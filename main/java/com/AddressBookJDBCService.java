@@ -171,4 +171,46 @@ public class AddressBookJDBCService {
 		}
 		return contactByCityOrStateMap;
 	}
+	
+	public AddressBookData addContact(String firstName, String lastName, String address, String city, String state, int zip,
+			long phone, String email, String type) throws AddressBookException {
+		Connection connection = null;
+		try {
+			connection = this.getConnection();
+			connection.setAutoCommit(false);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			Statement statement = connection.createStatement();
+			String sql = String.format(
+					"INSERT INTO address_book(first_name,last_name,address,city,state,zip,phone,email,type) "
+					+ "VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s')",
+					firstName, lastName, address, city, state, zip, phone, email, type);
+			statement.executeUpdate(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				e.printStackTrace();
+			}
+		}
+
+		try {
+			connection.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return new AddressBookData(firstName, lastName, address, city, state, zip, phone, email, type);
+	}
 }

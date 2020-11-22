@@ -45,4 +45,15 @@ public class AddressBookJDBCTest {
 		Map<String, Integer> contactByCityOrStateMap = addressBookService.readContactByCityOrState();
 		Assert.assertEquals(true, contactByCityOrStateMap.get("Maharashtra").equals(2));
 	}
+
+	@Test
+	public void givenNewContact_WhenAdded_ShouldSyncWithDB() throws AddressBookException {
+		AddressBookService addressBookService = new AddressBookService();
+		addressBookService.readAddressBookData();
+		LocalDate date = LocalDate.of(2020, 02, 20);
+		addressBookService.addContactToDatabase("Rishpa", "Toppo", "GC Residency", "Bokaro", "Jharkhand", 121004,
+				998810023, "rishpa123@gmail.com", "Family");
+		boolean result = addressBookService.checkAddressBookInSyncWithDB("Uttam");
+		Assert.assertTrue(result);
+	}
 }
