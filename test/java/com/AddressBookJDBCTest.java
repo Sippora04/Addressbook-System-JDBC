@@ -16,4 +16,15 @@ public class AddressBookJDBCTest {
 		addressbookdata = addressBookService.readAddressBookData();
 		Assert.assertEquals(7, addressbookdata.size());
 	}
+
+	@Test
+	public void givenAddressBookInDB_WhenUpdatedUsingPreparedStatement_ShouldSyncWithDB()
+			throws AddressBookException {
+		List<AddressBookData> addressbookdata;
+		AddressBookService addressBookService = new AddressBookService();
+		addressbookdata = addressBookService.readAddressBookData();
+		addressBookService.updateContactDetails("Ravina", "Jaipur", 130029);
+		boolean result = addressBookService.checkAddressBookInSyncWithDB("Ravina");
+		Assert.assertTrue(result);
+	}
 }
