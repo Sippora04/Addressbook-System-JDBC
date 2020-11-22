@@ -1,5 +1,7 @@
 package com;
 
+import java.sql.Date;
+
 public class AddressBookData {
 	private String first_name;
 	private String last_name;
@@ -11,9 +13,10 @@ public class AddressBookData {
 	private String email_id;
 	private String addressbook_name;
 	private String addressbook_type;
+	private Date date;
 
 	public AddressBookData(String first_name, String last_name, String address, String city, String state, int zip,
-			long phone_number, String email_id, String addressbook_name, String addressbook_type) {
+			long phone_number, String email_id, String addressbook_name, String addressbook_type, Date date) {
 		super();
 		this.first_name = first_name;
 		this.last_name = last_name;
@@ -25,6 +28,7 @@ public class AddressBookData {
 		this.email_id = email_id;
 		this.addressbook_name = addressbook_name;
 		this.addressbook_type = addressbook_type;
+		this.date = date;
 	}
 
 	@Override
@@ -32,7 +36,7 @@ public class AddressBookData {
 		return "AddressBookData [first_name=" + first_name + ", last_name=" + last_name + ", address=" + address
 				+ ", city=" + city + ", state=" + state + ", zip=" + zip + ", phone_number=" + phone_number
 				+ ", email_id=" + email_id + ", addressbook_name=" + addressbook_name + ", addressbook_type="
-				+ addressbook_type + "]";
+				+ addressbook_type + ", date=" + date + "]";
 	}
 
 	public String getFirst_name() {
@@ -113,6 +117,14 @@ public class AddressBookData {
 
 	public void setAddressbook_type(String addressbook_type) {
 		this.addressbook_type = addressbook_type;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
 	public AddressBookData(String first_name, String last_name, String address, String city, String state, int zip,

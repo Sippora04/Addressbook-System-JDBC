@@ -45,13 +45,5 @@ public class AddressBookService {
 
 	public Map<String, Integer> readContactByCityOrState() throws AddressBookException {
 		return this.addressbookJDBCService.getContactsByCityOrState();
-
 	}
-
-	public void addContactToDatabase(String firstName, String lastName, String address, String city, String state,
-			int zip, long phone, String email, String type) throws AddressBookException {
-		addressBookDataList.add(
-				addressbookJDBCService.addContact(firstName, lastName, address, city, state, zip, phone, email, type));
-	}
-
 }

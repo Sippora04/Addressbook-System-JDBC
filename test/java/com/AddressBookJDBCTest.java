@@ -1,6 +1,9 @@
 package com;
 
+import java.sql.Date;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -48,12 +51,27 @@ public class AddressBookJDBCTest {
 
 	@Test
 	public void givenNewContact_WhenAdded_ShouldSyncWithDB() throws AddressBookException {
+		AddressBookJDBCService addressBookJDBCService = new AddressBookJDBCService();
 		AddressBookService addressBookService = new AddressBookService();
-		addressBookService.readAddressBookData();
-		LocalDate date = LocalDate.of(2020, 02, 20);
-		addressBookService.addContactToDatabase("Rishpa", "Toppo", "GC Residency", "Bokaro", "Jharkhand", 121004,
-				998810023, "rishpa123@gmail.com", "Family");
-		boolean result = addressBookService.checkAddressBookInSyncWithDB("Uttam");
+		AddressBookJDBCService.addContact("Shivani", "Singh", "MG Road", "MP", "Bhopal", 100012, 99887701,
+				"shivani123@gmail.com", "addressBook2020", "Friend", Date.valueOf("2020-11-19"));
+		boolean result = addressBookService.checkAddressBookInSyncWithDB("Shivani");
 		Assert.assertTrue(result);
+	}
+
+	@Test
+	public void givenAddressBookMultipleData_ShouldAddToAdddressBook() throws AddressBookException {
+		AddressBookData[] arrayOfDetails = {
+				new AddressBookData("Bhupesh", "Singh", "9A Block", "Mumbai", "Maharashtra", 170091, 78008712,
+						"bhupesh123@gmail.com", "addressbook2020", "Friends", Date.valueOf("2020-07-12")),
+				new AddressBookData("Raina", "David", "MG Marg", "New Delhi", "Delhi", 110010, 871829191,
+						"ravina123@gmail.com", "addressBook2020", "Friends", Date.valueOf("2020-11-19")) };
+		AddressBookJDBCService addressBookJDBCService = new AddressBookJDBCService();
+		addressBookJDBCService.readData();
+		Instant startThread = Instant.now();
+		addressBookJDBCService.addContactToDBWithThreads(Arrays.asList(arrayOfDetails));
+		Instant endThread = Instant.now();
+		System.out.println("Duration With Thread:" + java.time.Duration.between(startThread, endThread));
+		Assert.assertEquals(10, addressBookJDBCService.countEntries());
 	}
 }
