@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,5 +106,42 @@ public class AddressBookJDBCService {
 			throw new AddressBookException("Unable to get data.Please check table for updation");
 		}
 		return addressBookList;
+	}
+
+	private List<AddressBookData> getAddressBookListFromResultset(ResultSet resultSet) throws AddressBookException {
+		List<AddressBookData> addressBookList = new ArrayList<AddressBookData>();
+		try {
+			while (resultSet.next()) {
+				String first_name = resultSet.getString("first_name");
+				String last_name = resultSet.getString("last_name");
+				String address = resultSet.getString("address");
+				String city = resultSet.getString("city");
+				String state = resultSet.getString("state");
+				int zip = resultSet.getInt("zip");
+				long phone_number = resultSet.getLong("phone_number");
+				String email_id = resultSet.getString("email_id");
+				String addressbook_name = resultSet.getString("addressbook_name");
+				String addressbook_type = resultSet.getString("addressbook_type");
+				addressBookList.add(new AddressBookData(first_name, last_name, address, city, state, zip, phone_number,
+						email_id, addressbook_name, addressbook_type));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return addressBookList;
+	}
+
+	public List<AddressBookData> getAdressBookDataByStartingDate(LocalDate startDate, LocalDate endDate)
+			throws AddressBookException {
+		String sql = String.format(
+				"select * from address_book where date_added between cast('%s' as date) and cast('%s' as date);",
+				startDate.toString(), endDate.toString());
+		try (Connection connection = this.getConnection()) {
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sql);
+			return this.getAddressBookListFromResultset(resultSet);
+		} catch (SQLException e) {
+			throw new AddressBookException("Connection Failed.");
+		}
 	}
 }
